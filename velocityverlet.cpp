@@ -1,23 +1,21 @@
 #include "velocityverlet.h"
-#include <iostream>
+#include "../system.h"
 
-VelocityVerlet::VelocityVerlet(double dt)
-{    
-    m_dt = dt;
+VelocityVerlet::VelocityVerlet(System* system)
+    : Integrator(system) {
 }
 
-void VelocityVerlet::integrateOneStep(SolarSystem &system)
-{
-
-    for(CelestialBody &body : system.bodies()) {
-        body.position = body.position + 0.5*body.velocity*m_dt;
-    }
-    system.calculateForcesAndEnergy();
-
-    for(CelestialBody &body : system.bodies()) {
-        body.velocity = body.velocity + body.force / body.mass * m_dt;
-        body.position = body.position + 0.5*body.velocity*m_dt;
-    }
-    //std::cout << system.bodies()[1].position.length() << std::endl;
+std::string VelocityVerlet::getName() {
+    return "Velocity verlet";
 }
 
+void VelocityVerlet::integrateOneStep(std::vector<Particle*> particles) {
+    /*
+     * This is where you should implement the Velocity Verlet algorithm.
+     *
+     * You should start by impelmenting the Euler-Cromer scheme in the
+     * Integrator::EulerCromer class, and then implement the more complicated
+     * Velocity Verlet algorithm only after you have a working implementation
+     * of Euler-Cromer.
+     */
+}

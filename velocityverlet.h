@@ -1,15 +1,14 @@
-#ifndef VELOCITYVERLET_H
-#define VELOCITYVERLET_H
-#include "solarsystem.h"
+#pragma once
+#include "integrator.h"
+#include "../particle.h"
+#include <string>
 
-class VelocityVerlet
-{
-public:
-    VelocityVerlet(double dt);
-    void integrateOneStep(SolarSystem &system);
-
+class VelocityVerlet : public Integrator {
 private:
-    double m_dt;
-};
+    bool m_firstStep = true;
 
-#endif // VELOCITYVERLET_H
+public:
+    VelocityVerlet(class System* system);
+    std::string getName();
+    void integrateOneStep(std::vector<Particle*> particles);
+};
