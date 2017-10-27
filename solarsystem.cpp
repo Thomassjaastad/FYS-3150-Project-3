@@ -34,6 +34,7 @@ void SolarSystem::calculateForcesAndEnergy()
 
     for(int i=0; i<numberOfBodies(); i++) {
         CelestialBody &body1 = m_bodies[i];
+        //Calculate momentum for all bodies
         m_momentumvec -= body1.mass*body1.velocity;
 
         for(int j=i+1; j<numberOfBodies(); j++) {
@@ -42,7 +43,7 @@ void SolarSystem::calculateForcesAndEnergy()
             double dr = deltaRVector.length();
             // Calculate the force and potential energy here
 
-            vec3 F = deltaRVector *4 * M_PI*M_PI/ (dr*dr*dr*dr) * body1.mass * body2.mass;
+            vec3 F = deltaRVector *4 * M_PI*M_PI/ pow(dr,2) * body1.mass * body2.mass;
             body1.force -= F;
             body2.force += F;
             m_potentialEnergy -= 4*M_PI*M_PI*body1.mass*body2.mass/dr;
@@ -56,7 +57,7 @@ void SolarSystem::calculateForcesAndEnergy()
     }
     m_bodies[0].velocity = m_momentumvec/m_bodies[0].mass;
     m_centerofmass /= m_totMass;
-    //cout << m_bodies[0].velocity << endl;
+
 
 }
 
@@ -66,31 +67,26 @@ void SolarSystem::calculateNewForceMercury()
     m_centerofmass.zeros();
 
     for(CelestialBody &body : m_bodies) {
-        // Reset forces on all bodies
-        body.force_mercury.zeros();
+         //Reset forces on all bodies
+         body.force.zeros();
     }
 
         CelestialBody &body1 = m_bodies[0];
-       // m_momentumvec -= body1.mass*body1.velocity;
 
-        //double U = 1.5*pow(10 , 11.0);
-        //double c = 3*pow(10 , 8.0);
-        //double year = 364.2*24*60*60;
-        double c_year = 63239.72;//c*year/U;  //SPeed of light in AU/yr
 
+        double c_sq = pow(63239.72, 2);//c*year/U;  //SPeed of light in AU/yr
+        double G = 4*M_PI*M_PI;
         CelestialBody &body2 = m_bodies[1];
         vec3 deltaRVector = body1.position - body2.position;
         double dr = deltaRVector.length();
-        // Calculate the realtivisic mercury force
-        vec3 l = body2.position.cross(body2.velocity);
-        double l_sq = l.length();
+        // Calculate the relativistic mercury force
+        vec3 l = body2.position.cross(body2.velocity); //Angular momentum vector
+        double l_sq = l.lengthSquared();
 
-        vec3 F = deltaRVector*4*M_PI*M_PI/ (dr*dr*dr)*body1.mass*body2.mass*(1 + 3*l_sq*l_sq/(dr*dr*dr*c_year*c_year));
+        vec3 F = deltaRVector*G/ (dr*dr*dr)*body1.mass*body2.mass;//*(1 + 3*l_sq/(dr*dr*c_sq));
 
-        body2.force_mercury += F;
+        body2.force += F;
 
-       // m_centerofmass += body1.mass*body1.position;
-       // m_angularmomentum += body1.mass*body1.velocity.length()*body1.position.length();
 
     }
 
@@ -154,11 +150,10 @@ void SolarSystem::writeToFile(string filename)
         }
     }
 
-    //m_file << numberOfBodies() << endl;
-    //m_file << "Comment line that needs to be here." << endl;
+
     for(CelestialBody &body : m_bodies) {
         m_file  << setprecision(10) << body.position.x()<<" "<< setprecision(10) << body.position.y() << " " << setprecision(10) << body.position.z() <<" " << totalEnergy() <<" " << angularmomentum() << "\n";
-        //m_file << setprecision(10) << mercury_yr << " " << setprecision(10) << theta << "/n";
+
     }
 }
 
