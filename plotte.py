@@ -15,8 +15,18 @@ for line in file:
 	x.append(float(words[0]))
 	y.append(float(words[1]))
 	z.append(float(words[2]))
-	#E.append(float(words[3]))
-	#ang_mom.append(float(words[4]))
+	E.append(float(words[3]))
+	ang_mom.append(float(words[4]))
+t = linspace(0, 10, len(E))
+
+#Plot E and ang_mom here!
+#plot(t, E)
+#xlabel('$Time$', fontsize = 30)
+#ylabel('$E$', fontsize = 30)
+#axis('equal')
+#show()
+#exit()
+
 pos_jordx = [] 
 pos_jordy = []
 pos_jordz = []
@@ -42,8 +52,6 @@ pos_plutox = []
 pos_plutoy = []
 pos_neptunx = []
 pos_neptuny = []
-
-#Too much code!
 
 
 d = 0

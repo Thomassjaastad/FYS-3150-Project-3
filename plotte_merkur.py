@@ -3,7 +3,7 @@ from matplotlib.pyplot import *
 from numpy import *
 
 
-file = open("/Users/thomassjastad/Desktop/build-SolarSystem-Desktop_Qt_5_9_1_clang_64bit-Debug/positions_mercury.txt", "r")
+file = open("/Users/thomassjastad/Desktop/build-SolarSystem-Desktop_Qt_5_9_1_clang_64bit-Release/positions_mercury.txt", "r")
 
 x = []
 y = []
@@ -14,8 +14,6 @@ for line in file:
 	x.append(float(words[0]))
 	y.append(float(words[1]))
 	z.append(float(words[2]))
-	#E.append(float(words[3]))
-	#ang_mom.append(float(words[4]))
 pos_merkurx = []
 pos_merkury = []
 
@@ -23,7 +21,7 @@ d = 0
 for i in range(len(x)):
 	d += 1
 	if d % 2 == 0:
-		pos_merkurx.append(float(x[i]))
+		pos_merkurx.append(float(x[i])) #pos_merkurx[0], pos_merkurx[-1]
 		pos_merkury.append(float(y[i]))
 
 #Suuuul
@@ -33,7 +31,7 @@ x = r*cos(phi)
 y = r*sin(phi)	
 
 
-#print pos_merkurx
+
 plot(x,y, label = 'Sun')
 hold('on')
 plot(pos_merkurx, pos_merkury, label = 'Mercury')
